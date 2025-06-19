@@ -1,7 +1,7 @@
-# Remove these Windows-only packages:
+# Remove Windows-only packages
 # pywin32==310
 # pypiwin32==223
 
-# Keep all other packages but add platform-specific markers
+# Include all other packages from your original requirements.txt
+# If you're using pyttsx3, add platform-specific condition:
 pyttsx3==2.98; platform_system != "Windows"
-# Add all your other packages here

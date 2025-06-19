@@ -1,7 +1,6 @@
-# Remove Windows-only packages
-# pywin32==310
-# pypiwin32==223
-
-# Include all other packages from your original requirements.txt
-# If you're using pyttsx3, add platform-specific condition:
-pyttsx3==2.98; platform_system != "Windows"
+streamlit==1.33.0
+python-dotenv==1.0.0
+SpeechRecognition==3.10.0
+gTTS==2.5.0
+pygame==2.6.1; platform_system != "Windows"
+google-generativeai==0.3.2

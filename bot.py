@@ -5,8 +5,16 @@ import speech_recognition as sr
 from gtts import gTTS
 import tempfile
 import time
-import pygame
+import platform
 import threading
+
+# Conditional import for pygame
+try:
+    import pygame
+    pygame.mixer.init()
+    PYGAME_AVAILABLE = True
+except (ImportError, ModuleNotFoundError):
+    PYGAME_AVAILABLE = False
 
 # Try importing google.generativeai with error handling
 try:
@@ -26,9 +34,6 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="collapsed",
 )
-
-# Initialize pygame mixer for reliable audio playback
-pygame.mixer.init()
 
 # Custom CSS for minimal interface with improved button alignment
 st.markdown("""
@@ -287,13 +292,21 @@ def text_to_speech_and_play(text, lang='en'):
         temp_filename = fp.name
         tts.save(temp_filename)
     
-    # Play using pygame (more reliable than browser autoplay)
-    pygame.mixer.music.load(temp_filename)
-    pygame.mixer.music.play()
-    
-    # Wait for audio to finish playing
-    while pygame.mixer.music.get_busy():
-        time.sleep(0.1)
+    # Play using pygame if available, otherwise use HTML audio
+    if PYGAME_AVAILABLE:
+        pygame.mixer.music.load(temp_filename)
+        pygame.mixer.music.play()
+        
+        # Wait for audio to finish playing
+        while pygame.mixer.music.get_busy():
+            time.sleep(0.1)
+    else:
+        # Alternative: Use HTML5 audio for web playback
+        audio_file = open(temp_filename, 'rb')
+        audio_bytes = audio_file.read()
+        st.audio(audio_bytes, format='audio/mp3', start_time=0)
+        # Add slight delay to mimic playback time
+        time.sleep(len(text) * 0.1)  # Rough estimate of speech duration
     
     # Return to idle state
     animation_placeholder.markdown("""

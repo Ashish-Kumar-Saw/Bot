@@ -1,0 +1,7 @@
+# Remove these Windows-only packages:
+# pywin32==310
+# pypiwin32==223
+
+# Keep all other packages but add platform-specific markers
+pyttsx3==2.98; platform_system != "Windows"
+# Add all your other packages here
